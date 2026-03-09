@@ -121,3 +121,24 @@ def complete_consultation(token_id):
     conn.close()
 
     return {"message": "Consultation completed"}
+
+# get waiting count
+
+def get_waiting_count(doctor_id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = """
+    SELECT COUNT(*)
+    FROM queue_tokens
+    WHERE doctor_id=%s AND status='waiting'
+    """
+
+    cursor.execute(query,(doctor_id,))
+    count = cursor.fetchone()[0]
+
+    cursor.close()
+    conn.close()
+
+    return count
