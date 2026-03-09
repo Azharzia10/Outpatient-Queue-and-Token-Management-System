@@ -3,7 +3,8 @@ from modules.queue_module import (
     add_patient_queue,
     view_queue,
     call_next_patient,
-    complete_consultation
+    complete_consultation,
+    get_waiting_count
 )
 
 queue_bp = Blueprint("queue_bp", __name__)
@@ -50,3 +51,13 @@ def finish_consultation(token_id):
     result = complete_consultation(token_id)
 
     return jsonify(result)
+
+@queue_bp.route("/queue/waiting_count/<int:doctor_id>", methods=["GET"])
+def waiting_count(doctor_id):
+
+    count = get_waiting_count(doctor_id)
+
+    return jsonify({
+        "doctor_id": doctor_id,
+        "waiting_patients": count
+    })
